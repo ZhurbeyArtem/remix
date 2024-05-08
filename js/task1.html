@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function nodeChildCount(node, deep = Infinity) {
+        let count = 0;
+        console.log(node.childNodes);
+        function traverse(node, depth) {
+          if (depth <= 0) {
+            return;
+          }
+
+          if (node.childNodes.length > 0) {
+            count++;
+
+            for (const childNode of node.childNodes) {
+              traverse(childNode, depth - 1);
+            }
+          }
+        }
+
+        traverse(node, deep);
+        return count;
+      }
+
+      const div = document.createElement("div");
+      const p = document.createElement("p");
+      const span = document.createElement("span");
+      p.appendChild(span);
+      div.appendChild(p);
+      div.appendChild(p);
+
+      console.log(nodeChildCount(div)); // 2
+      console.log(nodeChildCount(div, 1)); // 1
+      console.log(nodeChildCount(div, 2)); // 2
+    </script>
+  </body>
+</html>
