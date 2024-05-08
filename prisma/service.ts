@@ -1,30 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
-
-// якщо потрібно згенрувати товари
-// export const create = async () => {
-//   try {
-//     for (let i = 0; i < 100; i++) {
-//       const products = await prisma.goods.create({
-//         data: {
-//           sku: `${i}`,
-//           title: `test${i}`,
-//           categoryId: Math.floor(Math.random() * 10) + 1,
-//           storageId: Math.floor(Math.random() * 10) + 1
-//       }
-//       })
-//       console.log(products);
-//     }
-
-
-//   } catch (e) {
-//     throw e
-//   } finally {
-//     await prisma.$disconnect()
-//   }
-// }
-// create()
 export const countAllProducts = async () => {
   try {
     const products = await prisma.goods.count()
@@ -98,8 +74,10 @@ export const countProductByCategory = async (slug: string) => {
   try {
     const products = await prisma.goods.findMany({
       where: {
-        category: {
-          slug
+        categories: {
+          some: {
+            slug: slug,
+          },
         }
       }
     })
@@ -113,12 +91,14 @@ export const countProductByCategory = async (slug: string) => {
   }
 } // получить количество продуктов по категории
 
-export const countProductOnStockByCategory = async (uuid: string, slug: string) => { 
+export const countProductOnStockByCategory = async (uuid: string, slug: string) => {
   try {
     const products = await prisma.goods.findMany({
       where: {
-        category: {
-          slug
+        categories: {
+          some: {
+            slug: slug,
+          },
         },
         storage: {
           uuid
